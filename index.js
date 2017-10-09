@@ -72,9 +72,10 @@ class CoMocha {
      */
     wrap(generator) {
         return function (done) {
+            let self = this;
             // noinspection JSUnresolvedFunction
             co(function * () {
-                yield generator();
+                yield generator.bind(self)();
                 done();
             }).catch(function (e) {
                 //console.error(e);

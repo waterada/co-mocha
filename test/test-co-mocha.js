@@ -3,7 +3,7 @@ const assert = require('chai').assert;
 
 const __catch = function (cb, onError) {
     return function(done) {
-        cb(function (err) {
+        cb.bind(this)(function (err) {
             try {
                 onError(err ? `${err}` : 'エラーが発生しなかった');
                 done();
@@ -42,6 +42,10 @@ describe('CoMocha', function () {
             assert.include(err, 'AssertionError: ここでエラー: expected 108 to equal 109');
         }));
 
+        it('it の this コンテキストが使える', coMocha.wrap(function * () {
+            this.skip();
+            throw new Error('この throw は skip されて実行されない');
+        }));
     });
 
     describe('#catchThrown', function () {
@@ -129,13 +133,14 @@ describe('CoMocha', function () {
                 assert.include(err, "Error: You cannot use assertExistsInStack() because the error does not have a stack. error: No error was thrown!");
             }));
 
+            let LINE_NUM = 136;
             it('エラーが発生したが行番号がズレていたらエラーになる', __catch(coMocha.wrap(function * () {
                 let thrown = yield coMocha.catchThrown(function * () {
                     throw new Error('強制エラー');
                 });
                 thrown.assertExistsInStack(__filename, {line: -3});
             }), function (err) {
-                assert.include(err, `AssertionError: Line number of the filename '${__filename}' in stack: expected 134 to equal 133`);
+                assert.include(err, `AssertionError: Line number of the filename '${__filename}' in stack: expected ${LINE_NUM + 3} to equal ${LINE_NUM + 2}`);
             }));
 
             it('assertExistsInStack() でメッセージを渡すこともできる', __catch(coMocha.wrap(function * () {
@@ -144,7 +149,7 @@ describe('CoMocha', function () {
                 });
                 thrown.assertExistsInStack(__filename, {line: -3}, 'メッセージ渡せる');
             }), function (err) {
-                assert.include(err, `AssertionError: メッセージ渡せる: expected 143 to equal 142`);
+                assert.include(err, `AssertionError: メッセージ渡せる: expected ${LINE_NUM + 12} to equal ${LINE_NUM + 11}`);
             }));
 
             describe('LineNumDetector', function () {
