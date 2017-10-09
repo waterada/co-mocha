@@ -12,7 +12,7 @@ CoMocha
 依存
 -----
 
-- `node 6.x` 以上
+- `node 6` 以上
 - `co`
 - `mocha`
 - `chai`
