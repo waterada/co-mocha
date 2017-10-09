@@ -1,0 +1,35 @@
+{
+  "name": "@waterada/co-mocha",
+  "version": "1.0.0",
+  "description": "Easy to use the mocha with the co.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "chai": "^4.1.2",
+    "co": "^4.6.0",
+    "mocha": "^4.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha test/test-co-mocha.js"
+  },
+  "engines": {
+    "node": "6.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/waterada/co-mocha.git"
+  },
+  "keywords": [
+    "co",
+    "mocha"
+  ],
+  "author": "waterada",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/waterada/co-mocha/issues"
+  },
+  "homepage": "https://github.com/waterada/co-mocha#readme"
+}

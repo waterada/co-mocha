@@ -1,0 +1,18 @@
+language: node_js
+
+node_js:
+  - "6"
+
+cache:
+  directories:
+    - "node_modules"
+
+before_script:
+  - ls -lah
+  - npm install
+
+script:
+  - npm test
+
+notifications:
+  email: false
