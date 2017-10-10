@@ -2,7 +2,7 @@ version: '2'
 services:
 
   node:
-    image: node:boron-alpine
+    image: node:8
     container_name: node
     hostname: node
     volumes:
