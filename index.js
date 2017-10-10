@@ -1,6 +1,5 @@
 'use strict';
 
-const co = require('co');
 const assert = require('chai').assert;
 
 class LineNumDetector {
@@ -16,7 +15,7 @@ class LineNumDetector {
     line(plus, stack) {
         stack = stack || new Error().stack.replace(/ at __line .*?\n/, '');
         //console.log(stack);
-        let regexp = new RegExp(`[ (]${this.filename.replace(/\\/g, '\\\\').replace(/\//g, '\\/')}:(\\d+):`);
+        let regexp = new RegExp(`[ (]${this.filename.replace(/\\/g, '\\\\').replace(/\//g, '\\/').replace(/^(.*[\/\\])/, '(?:$1)?')}:(\\d+):`);
         let matches = stack.match(regexp);
         if (matches && matches[1]) {
             return parseInt(matches[1]) + plus;
@@ -67,30 +66,12 @@ class CoMocha {
     }
 
     /**
-     * @param {function} generator
-     * @return {function}
-     */
-    wrap(generator) {
-        return function (done) {
-            let self = this;
-            // noinspection JSUnresolvedFunction
-            co(function * () {
-                yield generator.bind(self)();
-                done();
-            }).catch(function (e) {
-                //console.error(e);
-                done(e);
-            });
-        };
-    };
-
-    /**
      * @param fn
      * @return {GetThrownRes}
      */
-    * catchThrown(fn) {
+    async catchThrown(fn) {
         try {
-            yield fn();
+            await fn();
             return new GetThrownRes('No error was thrown!');
         } catch (e) {
             return new GetThrownRes(e);
